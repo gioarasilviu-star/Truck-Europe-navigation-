@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buget Familie PRO</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f3f6f4;--card:#fff;--tx:#14201a;--mu:#5c6b63;--ac:#0f9d6b;--bd:#dfe6e2;--ch:#e8efeb;--ok:#15803d;--bad:#c62828;--wn:#b45309}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#101613;--card:#18211c;--tx:#eaf1ed;--mu:#9bb0a5;--ac:#34d399;--bd:#283530;--ch:#223029;--ok:#4ade80;--bad:#ff6b6b;--wn:#fbbf24}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#101613;--card:#18211c;--tx:#eaf1ed;--mu:#9bb0a5;--ac:#34d399;--bd:#283530;--ch:#223029;--ok:#4ade80;--bad:#ff6b6b;--wn:#fbbf24}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:16px;max-width:720px;margin-inline:auto}
+h1{font-size:22px;margin:4px 0 10px}h2{font-size:17px;margin:0 0 10px}h3{font-size:15px;margin:12px 0 6px}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:4px 0;z-index:5;scrollbar-width:none}
+.tabs button{flex:none;padding:10px 13px;border:0;border-radius:10px;background:var(--ch);color:var(--tx);font-size:14px;font-weight:600}
+.tabs button.on{background:var(--ac);color:#06241a}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--mu);margin:0 0 4px}
+input,select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:16px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+button.b,a.b{display:inline-block;padding:11px 14px;border-radius:10px;border:0;background:var(--ch);color:var(--tx);font-weight:600;font-size:15px;text-decoration:none;margin:4px 4px 0 0}
+button.p{background:var(--ac);color:#06241a}
+.k{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kp{background:var(--ch);border-radius:12px;padding:10px}.kp small{display:block}.kp b{font-size:19px}
+small,.note{color:var(--mu);font-size:13px}
+.bar{height:10px;background:var(--ch);border-radius:6px;overflow:hidden;margin:4px 0 8px}.bar i{display:block;height:100%;background:var(--ac)}
+.bar i.w{background:var(--wn)}.bar i.x{background:var(--bad)}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.wn{color:var(--wn)}
+table{width:100%;border-collapse:collapse;font-size:14px}td{padding:8px 4px;border-top:1px solid var(--bd);vertical-align:top}td.r{text-align:right;white-space:nowrap;font-weight:700}
+ul{margin:0;padding-left:18px;font-size:14px}li{margin-bottom:7px}
+.hide{display:none}svg{max-width:100%;height:auto}
+.lg{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;margin-top:6px}.lg span:before{content:"";display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--c);margin-right:4px}
+</style>
+</head>
+<body>
+<h1>💶 Buget Familie PRO</h1>
+<div class="tabs" id="tabs">
+<button data-t="s1" class="on">Panou</button><button data-t="s2">Tranzacții</button><button data-t="s3">Buget</button><button data-t="s4">Obiective</button><button data-t="s5">Datorii</button><button data-t="s6">Investiții</button><button data-t="s7">Sfaturi</button><button data-t="s8">Venituri</button>
+</div>
+<div class="row"><div><label>Luna</label><input type="month" id="mon"></div><div><label>Monedă</label><select id="cur"><option>RON</option><option>EUR</option><option>USD</option><option>GBP</option></select></div></div>
+
+<section id="s1">
+<div class="card"><div class="k" id="kp"></div><div id="al"></div></div>
+<div class="card"><h2>Cheltuieli pe categorii</h2><div id="dn"></div></div>
+<div class="card"><h2>Reguli 50/30/20</h2><div id="r50"></div></div>
+<div class="card"><h2>Sănătate financiară</h2><div id="hs"></div></div>
+</section>
+
+<section id="s2" class="hide">
+<div class="card"><h2>Adaugă tranzacție</h2>
+<div class="row"><div><label>Tip</label><select id="tt"><option value="out">Cheltuială</option><option value="in">Venit</option></select></div><div><label>Sumă</label><input id="ta" type="number" inputmode="decimal"></div></div>
+<div class="row"><div><label>Categorie</label><select id="tc"></select></div><div><label>Data</label><input id="td" type="date"></div></div>
+<label>Notă (opțional)</label><input id="tn" placeholder="ex. Kaufland"><br><br>
+<button class="b p" id="tadd">Adaugă</button><button class="b" id="demo">Date demo</button><button class="b" id="csv">Copiază CSV</button><button class="b" id="clr">Șterge tot</button>
+<small id="tm" style="display:block;margin-top:8px"></small></div>
+<div class="card"><h2>Tranzacțiile lunii</h2><table id="tl"></table></div>
+</section>
+
+<section id="s3" class="hide">
+<div class="card"><h2>Limite lunare pe categorii</h2><div id="bl"></div>
+<button class="b p" id="b50">Propune limite 50/30/20</button><p class="note">Se bazează pe venitul lunii. Necesități 50%, dorințe 30%, economii și datorii 20%.</p></div>
+</section>
+
+<section id="s4" class="hide">
+<div class="card"><h2>Obiective de economisire</h2>
+<div class="row3"><div><label>Nume</label><input id="gn" placeholder="Vacanță"></div><div><label>Țintă</label><input id="gt" type="number"></div><div><label>Deja strâns</label><input id="gs" type="number" value="0"></div></div>
+<button class="b p" id="gadd">Adaugă obiectiv</button></div>
+<div id="gl"></div>
+<div class="card"><h2>Fond de urgență</h2><div id="ef"></div></div>
+</section>
+
+<section id="s5" class="hide">
+<div class="card"><h2>Datorii și credite</h2>
+<div class="row3"><div><label>Nume</label><input id="dn1" placeholder="Card"></div><div><label>Sold</label><input id="db" type="number"></div><div><label>Dobândă %/an</label><input id="dr" type="number"></div></div>
+<div class="row"><div><label>Rată minimă/lună</label><input id="dm" type="number"></div><div><label>Plată extra/lună</label><input id="dx" type="number" value="0"></div></div>
+<button class="b p" id="dadd">Adaugă datorie</button></div>
+<div class="card" id="dl"></div>
+<div class="card"><h2>Plan de rambursare</h2><div id="dp"></div></div>
+</section>
+
+<section id="s6" class="hide">
+<div class="card"><h2>Calculator dobândă compusă</h2>
+<div class="row"><div><label>Sumă inițială</label><input id="i0" type="number" value="1000"></div><div><label>Depunere lunară</label><input id="i1" type="number" value="300"></div></div>
+<div class="row3"><div><label>Randament %/an</label><input id="i2" type="number" value="6"></div><div><label>Ani</label><input id="i3" type="number" value="20"></div><div><label>Inflație %</label><input id="i4" type="number" value="4"></div></div>
+<div id="ir"></div><div id="ic"></div></div>
+<div class="card"><h2>Profil de risc</h2><select id="rp"><option value="0">Conservator (sub 3 ani sau nu accept pierderi)</option><option value="1" selected>Echilibrat (5–10 ani)</option><option value="2">Dinamic (peste 10 ani)</option></select><div id="al2"></div></div>
+<div class="card"><h2>Ordinea corectă a banilor</h2><ul><li>1. Fond de urgență (3–6 luni de cheltuieli).</li><li>2. Datorii scumpe (carduri, credite de consum).</li><li>3. Investiții regulate, diversificate și cu costuri mici (fonduri indexate/ETF-uri).</li><li>4. Obiective pe termen lung (pensie, educație).</li></ul>
+<p class="note">Informații educaționale, nu sfaturi de investiții. Randamentele nu sunt garantate și te poți uita pe pierdere. Consultă un consilier autorizat înainte să investești.</p></div>
+</section>
+
+<section id="s7" class="hide">
+<div class="card"><h2>Sfaturi pentru tine</h2><ul id="ps"></ul></div>
+<div class="card"><h2>Idei de economisire</h2><div id="tp"></div></div>
+</section>
+
+<section id="s8" class="hide">
+<div class="card"><h2>Crește-ți veniturile</h2><div id="jb"></div></div>
+<div class="card"><h2>Pregătește cererea de mărire</h2><ul><li>Notează realizările din ultimele 6–12 luni, cu cifre.</li><li>Compară salariul cu oferte similare din piață.</li><li>Cere o discuție programată, nu pe hol.</li><li>Propune o sumă concretă și un plan B (bonus, zile libere, training).</li></ul></div>
+</section>
+<p class="note">Datele rămân doar în browserul acestui telefon și nu sunt trimise nicăieri. Dacă ștergi datele browserului, le pierzi: folosește „Copiază CSV” ca rezervă.</p>
+
+<script>
+const $=id=>document.getElementById(id);
+const CI=["Salariu","Freelance","Alocații","Alte venituri"];
+const CO=[["Locuință","n"],["Utilități","n"],["Mâncare","n"],["Transport","n"],["Sănătate","n"],["Copii","n"],["Datorii","s"],["Economii","s"],["Distracție","w"],["Haine","w"],["Abonamente","w"],["Altele","w"]];
+const COL=["#0f9d6b","#2563eb","#e8730c","#9333ea","#dc2626","#0891b2","#ca8a04","#16a34a","#db2777","#64748b","#7c3aed","#ea580c"];
+let S={tx:[],bud:{},goals:[],debts:[],cur:"RON",mon:new Date().toISOString().slice(0,7)};
+try{const s=localStorage.getItem("bugetpro");if(s)S=Object.assign(S,JSON.parse(s))}catch(e){}
+const save=()=>{try{localStorage.setItem("bugetpro",JSON.stringify(S))}catch(e){}};
+const f=x=>(Math.round(x*100)/100).toLocaleString("ro-RO",{maximumFractionDigits:0})+" "+S.cur;
+const num=id=>parseFloat($(id).value)||0;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("mon").value=S.mon;$("cur").value=S.cur;$("td").value=new Date().toISOString().slice(0,10);
+$("tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on",x===b));
+for(let i=1;i<=8;i++)$("s"+i).classList.toggle("hide","s"+i!==b.dataset.t);});
+$("mon").oninput=()=>{S.mon=$("mon").value;save();all()};$("cur").oninput=()=>{S.cur=$("cur").value;save();all()};
+function fillCats(){const o=$("tt").value==="in"?CI:CO.map(c=>c[0]);$("tc").innerHTML=o.map(c=>`<option>${c}</option>`).join("")}
+$("tt").oninput=fillCats;fillCats();
+
+function month(){return S.tx.filter(t=>t.d.startsWith(S.mon))}
+function stats(){const m=month(),inc=m.filter(t=>t.t==="in").reduce((a,t)=>a+t.a,0),by={};
+m.filter(t=>t.t==="out").forEach(t=>by[t.c]=(by[t.c]||0)+t.a);
+const out=Object.values(by).reduce((a,b)=>a+b,0);
+const grp={n:0,w:0,s:0};CO.forEach(c=>grp[c[1]]+=by[c[0]]||0);return{inc,out,by,grp}}
+
+function dash(){const{inc,out,by,grp}=stats(),bal=inc-out,sr=inc>0?Math.max(0,(inc-out)/inc*100):0;
+const d=new Date(),[y,mo]=S.mon.split("-").map(Number),dim=new Date(y,mo,0).getDate(),
+left=(d.toISOString().slice(0,7)===S.mon)?Math.max(1,dim-d.getDate()+1):dim,safe=bal>0?bal/left:0;
+$("kp").innerHTML=[["Venituri",f(inc)],["Cheltuieli",f(out)],["Rămas",`<span class="${bal<0?"bad":"ok"}">${f(bal)}</span>`],["Rată economisire",sr.toFixed(0)+"%"],["Poți cheltui/zi",f(safe)],["Tranzacții",month().length]].map(([a,b])=>`<div class="kp"><small>${a}</small><b>${b}</b></div>`).join("");
+const al=[];CO.forEach(([c])=>{const L=S.bud[c];if(L>0&&by[c]){const p=by[c]/L;if(p>1)al.push(`<div class="bad">⚠ ${c}: ai depășit limita (${f(by[c])} din ${f(L)})</div>`);else if(p>.9)al.push(`<div class="wn">⚠ ${c}: ai folosit ${(p*100).toFixed(0)}% din limită</div>`)}});
+$("al").innerHTML=al.join("")||'<small>Nicio alertă de buget.</small>';
+// donut
+const ent=Object.entries(by).sort((a,b)=>b[1]-a[1]);
+if(!ent.length){$("dn").innerHTML='<small>Adaugă cheltuieli ca să vezi graficul.</small>'}else{
+let a0=-Math.PI/2,R=70,r=44,p="";ent.forEach(([c,v],i)=>{const a1=a0+v/out*2*Math.PI,lg=a1-a0>Math.PI?1:0,pt=(rad,a)=>[100+rad*Math.cos(a),100+rad*Math.sin(a)];
+const[x1,y1]=pt(R,a0),[x2,y2]=pt(R,a1-.0001),[x3,y3]=pt(r,a1-.0001),[x4,y4]=pt(r,a0);
+p+=`<path d="M${x1} ${y1}A${R} ${R} 0 ${lg} 1 ${x2} ${y2}L${x3} ${y3}A${r} ${r} 0 ${lg} 0 ${x4} ${y4}Z" fill="${COL[CO.findIndex(z=>z[0]===c)%12]}"/>`;a0=a1});
+$("dn").innerHTML=`<svg viewBox="0 0 200 200" width="190">${p}<text x="100" y="104" text-anchor="middle" font-size="13" fill="currentColor">${f(out)}</text></svg><div class="lg">${ent.map(([c,v])=>`<span style="--c:${COL[CO.findIndex(z=>z[0]===c)%12]}">${c} ${(v/out*100).toFixed(0)}%</span>`).join("")}</div>`}
+// 50/30/20
+const rows=[["Necesități",grp.n,50,"n"],["Dorințe",grp.w,30,"w"],["Economii/datorii",grp.s+Math.max(0,bal),20,"s"]];
+$("r50").innerHTML=inc>0?rows.map(([n,v,t])=>{const p=v/inc*100;return `<div>${n}: <b>${p.toFixed(0)}%</b> <small>(țintă ${t}%)</small></div><div class="bar"><i class="${n==="Economii/datorii"?(p<t?"w":""):(p>t?"x":"")}" style="width:${Math.min(100,p)}%"></i></div>`}).join(""):'<small>Adaugă un venit.</small>';
+// health score
+let sc=0,nt=[];if(inc>0){sc+=Math.min(30,sr*1.5);if(grp.n/inc<=.5)sc+=20;else nt.push("Necesitățile depășesc 50% din venit.");if(grp.w/inc<=.3)sc+=15;else nt.push("Dorințele depășesc 30% din venit.");
+const dm=S.debts.reduce((a,x)=>a+x.m,0);if(dm/inc<.3)sc+=15;else nt.push("Ratele depășesc 30% din venit.");
+const ef=S.goals.find(g=>/urgen/i.test(g.n));if(ef)sc+=20;else nt.push("Nu ai un obiectiv de fond de urgență.")}
+$("hs").innerHTML=inc>0?`<div style="font-size:28px;font-weight:700" class="${sc>=70?"ok":sc>=40?"wn":"bad"}">${Math.round(sc)}/100</div>${nt.map(x=>`<div class="wn">• ${x}</div>`).join("")||'<div class="ok">Foarte bine!</div>'}`:'<small>Adaugă date pentru scor.</small>'}
+
+function list(){const m=month().sort((a,b)=>b.d.localeCompare(a.d));
+$("tl").innerHTML=m.length?m.map(t=>`<tr><td>${t.d.slice(8)}.${t.d.slice(5,7)}<br><small>${esc(t.c)}</small></td><td>${esc(t.n||"")}</td><td class="r ${t.t==="in"?"ok":""}">${t.t==="in"?"+":"−"}${f(t.a)}</td><td><button class="b" data-x="${t.id}" style="margin:0;padding:6px 10px">✕</button></td></tr>`).join(""):'<tr><td><small>Nicio tranzacție în luna aleasă.</small></td></tr>'}
+$("tl").onclick=e=>{const b=e.target.closest("[data-x]");if(!b)return;S.tx=S.tx.filter(t=>t.id!=b.dataset.x);save();all()};
+$("tadd").onclick=()=>{const a=num("ta");if(a<=0){$("tm").textContent="Introdu o sumă pozitivă.";return}
+S.tx.push({id:Date.now(),t:$("tt").value,c:$("tc").value,a,d:$("td").value||new Date().toISOString().slice(0,10),n:$("tn").value});$("ta").value="";$("tn").value="";$("tm").textContent="Adăugat.";save();all()};
+$("demo").onclick=()=>{const m=S.mon;[["in","Salariu",9000,"01"],["in","Alocații",1000,"05"],["out","Locuință",2600,"02"],["out","Utilități",750,"08"],["out","Mâncare",2300,"10"],["out","Transport",900,"12"],["out","Sănătate",300,"14"],["out","Copii",600,"15"],["out","Distracție",800,"18"],["out","Abonamente",190,"20"],["out","Haine",450,"22"],["out","Datorii",700,"25"]].forEach(([t,c,a,d],i)=>S.tx.push({id:Date.now()+i,t,c,a,d:m+"-"+d,n:"demo"}));save();all()};
+$("clr").onclick=()=>{if(confirm("Ștergi toate datele?")){S={tx:[],bud:{},goals:[],debts:[],cur:S.cur,mon:S.mon};save();all()}};
+$("csv").onclick=async()=>{const t="data,tip,categorie,suma,nota\n"+S.tx.map(x=>[x.d,x.t,x.c,x.a,'"'+(x.n||"")+'"'].join(",")).join("\n");
+try{await navigator.clipboard.writeText(t);$("tm").textContent="CSV copiat în clipboard."}catch(e){$("tm").textContent="Nu pot copia automat."}};
+
+function budget(){const by=stats().by;$("bl").innerHTML=CO.map(([c])=>{const L=S.bud[c]||0,v=by[c]||0,p=L?v/L*100:0;
+return `<label>${c} <small>(cheltuit ${f(v)})</small></label><input type="number" data-b="${c}" value="${L||""}" placeholder="Limită"><div class="bar"><i class="${p>100?"x":p>90?"w":""}" style="width:${Math.min(100,p)}%"></i></div>`}).join("")}
+$("bl").oninput=e=>{const c=e.target.dataset.b;if(c){S.bud[c]=parseFloat(e.target.value)||0;save();dash()}};
+$("b50").onclick=()=>{const{inc}=stats();if(!inc)return;const n=CO.filter(c=>c[1]==="n"),w=CO.filter(c=>c[1]==="w"),s=CO.filter(c=>c[1]==="s");
+[[n,.5],[w,.3],[s,.2]].forEach(([g,p])=>g.forEach(c=>S.bud[c[0]]=Math.round(inc*p/g.length)));save();all()};
+
+function goals(){$("gl").innerHTML=S.goals.map((g,i)=>{const p=Math.min(100,g.s/g.t*100);return `<div class="card"><b>${esc(g.n)}</b> <small>${f(g.s)} din ${f(g.t)} (${p.toFixed(0)}%)</small><div class="bar"><i style="width:${p}%"></i></div>
+<div class="row"><input type="number" id="gc${i}" placeholder="Adaugă sumă"><button class="b p" data-g="${i}">Depune</button></div><button class="b" data-gd="${i}">Șterge</button></div>`}).join("");
+const{out}=stats(),em=S.tx.length?out:0;
+$("ef").innerHTML=em?`Cheltuieli lunare: <b>${f(em)}</b><br>Fond minim (3 luni): <b>${f(em*3)}</b><br>Fond ideal (6 luni): <b>${f(em*6)}</b>`:'<small>Adaugă cheltuieli ca să calculăm fondul de urgență.</small>'}
+$("gadd").onclick=()=>{if(!$("gn").value||num("gt")<=0)return;S.goals.push({n:$("gn").value,t:num("gt"),s:num("gs")});$("gn").value="";$("gt").value="";save();all()};
+$("gl").onclick=e=>{const g=e.target.dataset.g,d=e.target.dataset.gd;if(g!=null){S.goals[g].s+=num("gc"+g);save();all()}if(d!=null){S.goals.splice(d,1);save();all()}};
+
+function sim(ds,ex,mode){let D=ds.map(d=>({...d})),mo=0,ti=0;const tot=D.reduce((a,d)=>a+d.m,0)+ex;
+while(D.some(d=>d.b>0)&&mo<600){mo++;D.forEach(d=>{if(d.b>0){const i=d.b*d.r/1200;d.b+=i;ti+=i}});let av=tot;
+D.forEach(d=>{if(d.b>0){const p=Math.min(d.b,d.m);d.b-=p;av-=p}});
+D.filter(d=>d.b>0).sort((a,b)=>mode==="a"?b.r-a.r:a.b-b.b).forEach(d=>{const p=Math.min(d.b,Math.max(0,av));d.b-=p;av-=p})}
+return{mo,ti,ok:mo<600}}
+function debts(){$("dl").innerHTML=S.debts.length?S.debts.map((d,i)=>`<div>${esc(d.n)}: <b>${f(d.b)}</b> <small>${d.r}% · rată ${f(d.m)}</small> <button class="b" data-dd="${i}" style="padding:4px 9px">✕</button></div>`).join(""):'<small>Nicio datorie adăugată.</small>';
+if(!S.debts.length){$("dp").innerHTML='<small>Adaugă datorii pentru plan.</small>';return}
+const ex=S.extra||0,A=sim(S.debts,ex,"a"),Sn=sim(S.debts,ex,"s"),N=sim(S.debts,0,"a"),r=x=>x.ok?`${Math.floor(x.mo/12)} ani ${x.mo%12} luni`:"peste 50 de ani (ratele nu acoperă dobânda)";
+$("dp").innerHTML=`<table><tr><td>Doar ratele minime</td><td class="r">${r(N)}<br><small>dobânzi ${f(N.ti)}</small></td></tr><tr><td>Avalanșă (dobânda cea mai mare întâi)</td><td class="r">${r(A)}<br><small>dobânzi ${f(A.ti)}</small></td></tr><tr><td>Bulgăre de zăpadă (soldul cel mai mic întâi)</td><td class="r">${r(Sn)}<br><small>dobânzi ${f(Sn.ti)}</small></td></tr></table><p class="note">Plata extra: ${f(ex)}/lună. Avalanșa costă de obicei mai puțin, bulgărele de zăpadă motivează prin victorii rapide.</p>`}
+$("dadd").onclick=()=>{if(num("db")<=0)return;S.debts.push({n:$("dn1").value||"Datorie",b:num("db"),r:num("dr"),m:num("dm")});S.extra=num("dx");$("dn1").value="";$("db").value="";save();all()};
+$("dx").oninput=()=>{S.extra=num("dx");save();debts()};
+$("dl").onclick=e=>{const d=e.target.dataset.dd;if(d!=null){S.debts.splice(d,1);save();all()}};
+
+function invest(){const p=num("i0"),m=num("i1"),r=num("i2")/1200,y=Math.max(1,Math.min(60,num("i3"))),inf=num("i4")/100;let v=p,dep=p,pts=[[0,v]];
+for(let i=1;i<=y*12;i++){v=v*(1+r)+m;dep+=m;if(i%12===0)pts.push([i/12,v])}
+const real=v/Math.pow(1+inf,y),mx=Math.max(...pts.map(q=>q[1]),1);
+const path=pts.map((q,i)=>`${i?"L":"M"}${20+q[0]/y*270} ${130-q[1]/mx*110}`).join("");
+$("ir").innerHTML=`Valoare finală: <b>${f(v)}</b><br>Depus de tine: <b>${f(dep)}</b><br>Câștig din dobândă: <b class="ok">${f(v-dep)}</b><br>În banii de azi (după inflație): <b>${f(real)}</b>`;
+$("ic").innerHTML=`<svg viewBox="0 0 300 140"><path d="${path}" fill="none" stroke="var(--ac)" stroke-width="3"/><line x1="20" y1="130" x2="290" y2="130" stroke="var(--bd)"/><text x="20" y="12" font-size="10" fill="currentColor">${f(mx)}</text><text x="270" y="140" font-size="10" fill="currentColor">${y} ani</text></svg>`;
+const A=[["Conservator","Economii/depozite și obligațiuni 70%, fonduri de acțiuni 20%, lichiditate 10%"],["Echilibrat","Fonduri de acțiuni diversificate 50%, obligațiuni 35%, lichiditate 15%"],["Dinamic","Fonduri de acțiuni diversificate 75%, obligațiuni 20%, lichiditate 5%"]][+$("rp").value];
+$("al2").innerHTML=`<p><b>${A[0]}</b>: ${A[1]}.</p><small>Exemplu orientativ, nu recomandare personalizată.</small>`}
+["i0","i1","i2","i3","i4","rp"].forEach(k=>$(k).oninput=invest);
+
+function tips(){const{inc,out,by}=stats(),p=[];const sh=(c,x)=>out>0&&(by[c]||0)/out>x;
+if(sh("Mâncare",.3))p.push("Mâncarea e peste 30% din cheltuieli: fă listă înainte de cumpărături, compară prețul pe kg și gătește pentru 2–3 zile.");
+if(sh("Abonamente",.06))p.push("Abonamentele sunt mari: anulează cele nefolosite și împarte pachetele familiale.");
+if(sh("Distracție",.15))p.push("Distracția depășește 15%: stabilește un plafon lunar și o zi gratuită pe săptămână.");
+if(sh("Transport",.2))p.push("Transportul e scump: compară abonamentul cu mașina, încearcă mersul în comun sau carpooling.");
+if(sh("Locuință",.4))p.push("Locuința e peste 40% din cheltuieli: renegociază chiria sau refinanțează creditul dacă se poate.");
+if(inc>0&&(inc-out)/inc<.1)p.push("Economisești sub 10% din venit: automatizează un transfer în ziua salariului, înainte să cheltuiești.");
+if(S.debts.some(d=>d.r>15))p.push("Ai o datorie cu dobândă peste 15%: e prioritatea ta, fiindcă dobânda mare mănâncă mai mult decât ai câștiga investind.");
+$("ps").innerHTML=p.length?p.map(x=>`<li>${x}</li>`).join(""):"<li>Adaugă tranzacții în luna aleasă și primești sfaturi personalizate.</li>";
+const T=[["Mâncare","Cumpără produse de sezon, pe bucată cu preț mic pe kg, și folosește aplicațiile de oferte ale magazinelor. Evită cumpărăturile când ți-e foame."],["Utilități","Reglează termostatul cu 1°C mai jos, folosește becuri LED și compară furnizorii de energie anual."],["Transport","Verifică presiunea în roți, planifică traseele și compară benzinăriile cu aplicații de prețuri."],["Abonamente","Verifică extrasul de card o dată pe trimestru și renunță la ce nu ai folosit în 30 de zile."],["Obiceiuri","Aplică regula de 48 de ore pentru achizițiile mari de impuls."],["Familie","Fă o ședință financiară lunară de 20 minute cu partenerul/partenera."],["Bancă","Compară comisioanele și dobânzile la depozite. Nu lăsa banii de urgență într-un cont fără dobândă."],["Asigurări","Compară ofertele la asigurarea auto și a locuinței înainte de reînnoire."]];
+$("tp").innerHTML=T.map(([a,b])=>`<h3>${a}</h3><div style="font-size:14px">${b}</div>`).join("")}
+
+function jobs(){const q=s=>"https://www.google.com/search?q="+encodeURIComponent(s);
+const J=[["Cere o mărire sau treci la un loc mai bine plătit","Compară salariile pe piață pentru poziția ta.","salarii "+"pentru poziția mea comparație piață"],["Joburi remote","Poți lucra pentru companii din alte țări.","remote jobs Europe entry level"],["Freelancing","Vinde o abilitate (scris, design, programare, traduceri, contabilitate).","freelance jobs for beginners platforms"],["Cursuri și certificări","Un curs recunoscut crește șansele de salariu mai mare.","free online courses certificates career"],["Muncă în străinătate","Verifică joburile pe portalul oficial al UE.","https://eures.europa.eu/index_ro"],["Venit pasiv mic","Chirie de cameră/parcare, vânzare de lucruri nefolosite, piese lucrate manual.","side income ideas family budget"]];
+$("jb").innerHTML=J.map(([a,b,c])=>`<h3>${a}</h3><div style="font-size:14px">${b}</div><a class="b" target="_blank" rel="noopener" href="${c.startsWith("http")?c:q(c)}">Caută</a>`).join("")+'<p class="note">Atenție la ofertele „bani ușori” sau care cer bani în avans: sunt adesea înșelătorii.</p>'}
+
+function all(){dash();list();budget();goals();debts();invest();tips();jobs()}
+all();
+</script>
+</body>
+</html>
